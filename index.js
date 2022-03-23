@@ -62,12 +62,20 @@ client.on("messageCreate", (message) => {
       offset = 7;
     }
 
-    let duration = Math.floor(
-        (date(args.join(" ")).getTime() +
-          date(args.join(" ")).getTimezoneOffset() * 60 * 1000 +
-          parseInt(offset) * 60 * 60 * 1000) /
-          1000
-      ),
+    let duration =
+        parseInt(offset) >= 1
+          ? Math.floor(
+              (date(args.join(" ")).getTime() +
+                date(args.join(" ")).getTimezoneOffset() * 60 * 1000 +
+                parseInt(offset) * 60 * 60 * 1000) /
+                1000
+            )
+          : Math.floor(
+              (date(args.join(" ")).getTime() +
+                Math.abs(date(args.join(" ")).getTimezoneOffset()) * 60 * 1000 +
+                Math.abs(parseInt(offset)) * 60 * 60 * 1000) /
+                1000
+            ),
       embed = new Discord.MessageEmbed()
         .setColor("#0099ff")
         .setTitle("Timestamps for days")
