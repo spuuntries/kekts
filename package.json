@@ -10,6 +10,7 @@
   "dependencies": {
     "date.js": "^0.3.3",
     "discord.js": "^13.6.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "enmap": "^5.8.8"
   }
 }

@@ -30,7 +30,8 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
   let msg = message.content.trim().trimEnd();
-  if (message.author.bot || !msg.toLowerCase().startsWith(procenv.BOTPREFIX)) return;
+  if (message.author.bot || !msg.toLowerCase().startsWith(procenv.BOTPREFIX))
+    return;
   let args = msg.slice(procenv.BOTPREFIX.length).split(/ +/g),
     cmd = args.shift().toLowerCase();
 
@@ -44,12 +45,32 @@ client.on("messageCreate", (message) => {
       return;
     }
 
-    let duration = Math.floor(date(args.join(" ")).valueOf() / 1000),
+    // Check if a timezone offset was specified, and check if valid offset
+    let offsetRegex = /\[[0-9]+]/im,
+      offset;
+    if (offsetRegex.test(args[0])) {
+      offset = args[0].match(offsetRegex)[0].replace(/[\[\]]/g, "");
+      if (isNaN(offset)) {
+        message.reply({
+          content: `Invalid timezone offset!`,
+          allowedMentions: false,
+        });
+        return;
+      }
+      args.shift();
+    } else {
+      offset = 7;
+    }
+
+    let duration = Math.floor(
+        (date(args.join(" ")).getTime() +
+          date(args.join(" ")).getTimezoneOffset() * 60 * 1000 +
+          parseInt(offset) * 60 * 60 * 1000) /
+          1000
+      ),
       embed = new Discord.MessageEmbed()
         .setColor("#0099ff")
-        .setTitle(
-          "Timestamps for days"
-        )
+        .setTitle("Timestamps for days")
         .setAuthor({
           name: `Kek's Timestamps ⌚✍️`,
           iconURL: client.user.avatarURL(),
