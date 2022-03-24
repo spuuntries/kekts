@@ -63,7 +63,7 @@ client.on("messageCreate", (message) => {
     }
 
     let duration =
-        parseInt(offset) >= 1
+        parseInt(offset) >= 0
           ? Math.floor(
               (date(args.join(" ")).getTime() +
                 date(args.join(" ")).getTimezoneOffset() * 60 * 1000 +
