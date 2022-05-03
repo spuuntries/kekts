@@ -46,7 +46,7 @@ client.on("messageCreate", (message) => {
     }
 
     // Check if a timezone offset was specified, and check if valid offset
-    let offsetRegex = /\[-?[0-9]+]/im,
+    let offsetRegex = /\[[+|-]?[0-9]+]/im,
       offset;
     if (offsetRegex.test(args[0])) {
       offset = args[0].match(offsetRegex)[0].replace(/[\[\]]/g, "");
