@@ -46,18 +46,27 @@ client.on("messageCreate", (message) => {
     }
 
     // Check if a timezone offset was specified, and check if valid offset
-    let offsetRegex = /\[[+|-]?[0-9]+]/im,
+    let partialRegex = /\[*]/im,
       offset;
-    if (offsetRegex.test(args[0])) {
-      offset = args[0].match(offsetRegex)[0].replace(/[\[\]]/g, "");
-      if (isNaN(offset)) {
+    if (partialRegex.test(args[0])) {
+      let offsetRegex = /\[[+|-]?[0-9]+]/im;
+      if (offsetRegex.test(args[0])) {
+        offset = args[0].match(offsetRegex)[0].replace(/[\[\]]/g, "");
+        if (!offset) {
+          message.reply({
+            content: `Invalid timezone offset!`,
+            allowedMentions: false,
+          });
+          return;
+        }
+        args.shift();
+      } else {
         message.reply({
           content: `Invalid timezone offset!`,
           allowedMentions: false,
         });
         return;
       }
-      args.shift();
     } else {
       offset = 7;
     }
